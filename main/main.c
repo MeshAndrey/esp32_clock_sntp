@@ -73,12 +73,12 @@ void app_main(void)
             struct timeval tv_now;
             gettimeofday(&tv_now, NULL);
             int64_t cpu_time = (int64_t)tv_now.tv_sec * 1000000L 
-		    + (int64_t)tv_now.tv_usec;
+                             + (int64_t)tv_now.tv_usec;
             int64_t error_time = cpu_time + 500 * 1000L;
             struct timeval tv_error = { 
-	        .tv_sec  = error_time / 1000000L, 
-		.tv_usec = error_time % 1000000L 
-	    };
+                .tv_sec  = error_time / 1000000L, 
+                .tv_usec = error_time % 1000000L 
+            };
             settimeofday(&tv_error, NULL);
         }
 
@@ -105,7 +105,7 @@ void app_main(void)
     {
         struct timeval outdelta;
         while (sntp_get_sync_status() == SNTP_SYNC_STATUS_IN_PROGRESS) 
-	{
+        {
             adjtime(NULL, &outdelta);
             ESP_LOGI(TAG, "Waiting for adjusting time ... outdelta = %li sec: %li ms: %li us",
                         (long)outdelta.tv_sec,
@@ -119,8 +119,8 @@ void app_main(void)
     tm1637_set_brightness(lcd, 6);
     bool show_dot = true;
     while (1)
-    {        
-	tm1637_set_segment_number(lcd, 0, timeinfo.tm_hour / 10, show_dot);
+    {   
+        tm1637_set_segment_number(lcd, 0, timeinfo.tm_hour / 10, show_dot);
         tm1637_set_segment_number(lcd, 1, timeinfo.tm_hour % 10, show_dot); // On my display "dot" (clock symbol ":") connected only here
         tm1637_set_segment_number(lcd, 2, timeinfo.tm_min / 10, show_dot);
         tm1637_set_segment_number(lcd, 3, timeinfo.tm_min % 10, show_dot);
@@ -152,10 +152,10 @@ static void obtain_time(void)
     int retry = 0;
     const int retry_count = 10;
     while (sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET 
-		       && ++retry < retry_count) 
+                       && ++retry < retry_count) 
     {
         ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)", 
-			retry, retry_count);
+                 retry, retry_count);
         vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
     time(&now);
